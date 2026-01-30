@@ -27,22 +27,11 @@ frd diag tcp-ping example.com --port 443 --count 4
 
 ---
 
-# LICENSE (MIT)
-
-### `LICENSE`
-```text
-MIT License
-
-Copyright (c) 2026 Rodrigo
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction...
-```
-
 # Como rodar agora
 No root do projeto:
+```
 pip install -e .
 frd --help
 frd net ipv4-info 192.168.1.0/24
 frd scan tcp 127.0.0.1 --ports 22,80,443 --json
+```
