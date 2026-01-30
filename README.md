@@ -30,10 +30,6 @@ frd/
 │       │   └── cli.py
 │       ├── ipv4/
 │       ├── ipv6/
-│       │   ├── info.py
-│       │   ├── expand.py
-│       │   ├── reverse.py
-│       │   └── subnets.py   # em evolução
 │       └── dns/
 ├── tests/
 │   ├── ipv4/
