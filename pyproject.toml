@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "Toolkit profissional de redes e segurança (CLI)"
 readme = "README.md"
 requires-python = ">=3.11"
-authors = [{ name = "Rodrigo" }]
+authors = [{ name = "Rodrigo Viana" }]
 dependencies = [
   "typer[all]>=0.12.0",
   "rich>=13.7.0",
