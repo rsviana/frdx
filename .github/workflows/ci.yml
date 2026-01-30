@@ -14,9 +14,7 @@ jobs:
           python-version: "3.11"
       - run: pip install -U pip
       - run: pip install -e . pytest ruff
-      - run: ruff check .
       - run: pytest -q
       - run: pip install -U pip setuptools wheel
-      - run: pip install -e . pytest ruff
       - run: ruff check .
       - run: pytest -q -m "not integration"
