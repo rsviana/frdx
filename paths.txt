@@ -1,8 +1,6 @@
-﻿
-robots.txt
+﻿robots.txt
 sitemap.xml
+bkp/
 css/
 uploads/
 admin/
-laboratorio/
-tool/

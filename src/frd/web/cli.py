@@ -2,11 +2,13 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+
 import typer
 
 from frd.web.check import iter_check, results_to_jsonable
 
 app = typer.Typer(help="Ferramentas HTTP/Web (auditoria e validação).")
+
 
 @app.command("check")
 def check(
@@ -29,7 +31,10 @@ def check(
     if paths_file is not None:
         if not paths_file.exists():
             raise typer.BadParameter(f"paths-file não encontrado: {paths_file}")
-        lines = [ln.strip() for ln in paths_file.read_text(encoding="utf-8").splitlines()]
+
+        # utf-8-sig remove BOM (U+FEFF) caso o arquivo venha com BOM (comum no Windows)
+        text = paths_file.read_text(encoding="utf-8-sig")
+        lines = [ln.strip().lstrip("\ufeff") for ln in text.splitlines()]
         collected.extend([ln for ln in lines if ln and not ln.startswith("#")])
 
     if not collected:
@@ -42,15 +47,6 @@ def check(
         except ValueError:
             raise typer.BadParameter("--include deve ser números separados por vírgula (ex: 200,301,403)")
 
-    # results = run_check(
-    #     base_url=base_url,
-    #     paths=collected,
-    #     method=method,
-    #     timeout=timeout,
-    #     follow_redirects=follow_redirects,
-    #     include_status=include_set,
-    # )
-
     results = []
 
     for r in iter_check(
@@ -61,28 +57,25 @@ def check(
         follow_redirects=follow_redirects,
         include_status=include_set,
     ):
-
+        # streaming (texto)
         if not json_out:
             if r.error:
                 typer.echo(f"[ERR] {r.method} {r.url} ({r.elapsed_ms}ms) error={r.error}")
             else:
                 extra = f" -> {r.redirected_to}" if r.redirected_to else ""
                 typer.echo(f"[{r.status_code}] {r.method} {r.url} ({r.elapsed_ms}ms){extra}")
+
         results.append(r)
 
-    if json_out:
-        typer.echo(json.dumps(results_to_jsonable(results), ensure_ascii=False, indent=2))
-
-
-
-
+    # JSON no final
     if json_out:
         typer.echo(json.dumps(results_to_jsonable(results), ensure_ascii=False, indent=2))
         raise typer.Exit(code=0)
 
-    for r in results:
-        if r.error:
-            typer.echo(f"[ERR] {r.method} {r.url} ({r.elapsed_ms}ms) error={r.error}")
-        else:
-            extra = f" -> {r.redirected_to}" if r.redirected_to else ""
-            typer.echo(f"[{r.status_code}] {r.method} {r.url} ({r.elapsed_ms}ms){extra}")
+    # Summary no final (uma vez só)
+    ok_200 = [x for x in results if x.status_code == 200]
+    if ok_200:
+        typer.echo("\n────────── Summary (200 OK) ──────────")
+        for x in ok_200:
+            typer.echo(f"  {x.path}")
+        typer.echo(f"\nTotal 200 OK: {len(ok_200)}")
