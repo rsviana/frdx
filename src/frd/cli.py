@@ -1,5 +1,5 @@
 from __future__ import annotations
-from frd.netcalc.ipv6 import ipv6_info
+from frd.netcalc.ipv6 import ipv6_info, ipv6_expand, ipv6_reverse_nibble
 
 import asyncio
 import typer
@@ -34,21 +34,34 @@ def cmd_ipv4_info(
     result = ipv4_info(cidr)
     print_result(result, as_json=json, title="IPv4 Info")
 
-
 @net_app.command("ipv6-info")
 def cmd_ipv6_info(
-    address: str,
-    json: bool = typer.Option(False, "--json", help="Saída em JSON"),
+    value: str,
+    json: bool = typer.Option(False, "--json", help="Saída JSON"),
 ):
-    """
-    Mostra informações detalhadas de um endereço ou prefixo IPv6.
-    """
-    try:
-        result = ipv6_info(address)
-        print_result(result, as_json=json, title="IPv6 Info")
-    except Exception as e:
-        typer.echo(f"Erro: {e}", err=True)
-        raise typer.Exit(code=2)
+    """Informações de IPv6 (endereço ou prefixo)."""
+    result = ipv6_info(value)
+    print_result(result, as_json=json, title="IPv6 Info")
+
+
+@net_app.command("ipv6-expand")
+def cmd_ipv6_expand(
+    addr: str,
+    json: bool = typer.Option(False, "--json", help="Saída JSON"),
+):
+    """Expande IPv6 para forma completa (exploded)."""
+    result = ipv6_expand(addr)
+    print_result(result, as_json=json, title="IPv6 Expand")
+
+
+@net_app.command("ipv6-reverse")
+def cmd_ipv6_reverse(
+    addr: str,
+    json: bool = typer.Option(False, "--json", help="Saída JSON"),
+):
+    """Gera o reverse nibble (ip6.arpa) para uso em PTR."""
+    result = ipv6_reverse_nibble(addr)
+    print_result(result, as_json=json, title="IPv6 Reverse (ip6.arpa)")
 
 @net_app.command("cidr-to-mask")
 def cmd_cidr_to_mask(

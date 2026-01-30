@@ -30,6 +30,7 @@ target-version = "py311"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+addopts = ['-m', 'not integration']
 markers = [
-  "integration: testes que dependem de rede/serviços externos"
+  "integration: testes que dependem de rede/serviços externos",
 ]
