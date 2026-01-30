@@ -4,6 +4,7 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 from frd.web.check import run_check
 
 
+### Corrigido para CI
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == "/":
