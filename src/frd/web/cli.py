@@ -5,6 +5,7 @@ from pathlib import Path
 import typer
 
 from frd.web.check import run_check, results_to_jsonable
+from frd.web.check import iter_check, results_to_jsonable
 
 app = typer.Typer(help="Ferramentas HTTP/Web (auditoria e validação).")
 
@@ -42,14 +43,39 @@ def check(
         except ValueError:
             raise typer.BadParameter("--include deve ser números separados por vírgula (ex: 200,301,403)")
 
-    results = run_check(
+    # results = run_check(
+    #     base_url=base_url,
+    #     paths=collected,
+    #     method=method,
+    #     timeout=timeout,
+    #     follow_redirects=follow_redirects,
+    #     include_status=include_set,
+    # )
+
+    results = []
+
+    for r in iter_check(
         base_url=base_url,
         paths=collected,
         method=method,
         timeout=timeout,
         follow_redirects=follow_redirects,
         include_status=include_set,
-    )
+    ):
+
+        if not json_out:
+            if r.error:
+                typer.echo(f"[ERR] {r.method} {r.url} ({r.elapsed_ms}ms) error={r.error}")
+            else:
+                extra = f" -> {r.redirected_to}" if r.redirected_to else ""
+                typer.echo(f"[{r.status_code}] {r.method} {r.url} ({r.elapsed_ms}ms){extra}")
+        results.append(r)
+
+    if json_out:
+        typer.echo(json.dumps(results_to_jsonable(results), ensure_ascii=False, indent=2))
+
+
+
 
     if json_out:
         typer.echo(json.dumps(results_to_jsonable(results), ensure_ascii=False, indent=2))
