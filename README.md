@@ -76,8 +76,15 @@ IPv6
 :::frd net ipv6-info 2001:db8::1
 
 
-frd -dns --help
+frd dns --help
 :::frd dns resolve google.com
+
+frd scan --help
+::: frd scan tcp 8.8.8.8 --ports 53
+
+Multpilas portas:
+:::frd scan tcp 8.8.8.8 --ports 22,53,443
+
 
 ```
 
