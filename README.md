@@ -60,6 +60,26 @@ Ou diretamente:
 ```bash
 python -m frd.cli
 ```
+---
+## 🆘 Helps?
+```
+frd net --help
+- ipv4-info
+- ipv6-info
+- ipv6-expand
+- ipv6-reverse
+
+IPv4
+:::frd net ipv4-info 192.168.0.1/24
+
+IPv6
+:::frd net ipv6-info 2001:db8::1
+
+
+frd -dns --help
+:::frd dns resolve google.com
+
+```
 
 ---
 
