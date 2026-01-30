@@ -123,7 +123,7 @@ def cmd_scan_tcp(
     banner: bool = typer.Option(False, "--banner", help="Tenta capturar banner"),
     json: bool = typer.Option(False, "--json"),
 ):
-    """Scan TCP connect (use apenas com autorização)."""
+    """Scan TCP connect."""
     host = validate_ipv4_host(target)
     ports_list = parse_ports(ports).ports
     res = asyncio.run(
