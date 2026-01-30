@@ -4,7 +4,6 @@ import json
 from pathlib import Path
 import typer
 
-from frd.web.check import run_check, results_to_jsonable
 from frd.web.check import iter_check, results_to_jsonable
 
 app = typer.Typer(help="Ferramentas HTTP/Web (auditoria e validação).")

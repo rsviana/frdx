@@ -7,11 +7,15 @@ from frd.web.check import run_check
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == "/":
-            self.send_response(200); self.end_headers(); self.wfile.write(b"ok")
+            self.send_response(200)
+            self.end_headers()
+            self.wfile.write(b"ok")
         elif self.path == "/admin":
-            self.send_response(403); self.end_headers()
+            self.send_response(403)
+            self.end_headers()
         else:
-            self.send_response(404); self.end_headers()
+            self.send_response(404)
+            self.end_headers()
 
     def log_message(self, format, *args):
         return
