@@ -4,6 +4,8 @@ FRD é uma ferramenta em Python focada em **redes, endereçamento IP e seguranç
 
 O projeto foi desenhado para ser **previsível e extensível**, servindo tanto para uso prático quanto para estudo.
 
+> Esse projeto ainda esta em evolução e testes 
+
 ---
 
 ## ✨ Principais características
