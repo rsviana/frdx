@@ -1,4 +1,5 @@
 from __future__ import annotations
+from frd.netcalc.ipv6 import ipv6_info
 
 import asyncio
 import typer
@@ -33,6 +34,21 @@ def cmd_ipv4_info(
     result = ipv4_info(cidr)
     print_result(result, as_json=json, title="IPv4 Info")
 
+
+@net_app.command("ipv6-info")
+def cmd_ipv6_info(
+    address: str,
+    json: bool = typer.Option(False, "--json", help="Saída em JSON"),
+):
+    """
+    Mostra informações detalhadas de um endereço ou prefixo IPv6.
+    """
+    try:
+        result = ipv6_info(address)
+        print_result(result, as_json=json, title="IPv6 Info")
+    except Exception as e:
+        typer.echo(f"Erro: {e}", err=True)
+        raise typer.Exit(code=2)
 
 @net_app.command("cidr-to-mask")
 def cmd_cidr_to_mask(
