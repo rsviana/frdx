@@ -1,6 +1,7 @@
 # FRD - Ferramenta de Redes e Segurança
 
 Toolkit CLI em Python para profissionais de redes e segurança.
+> Ainda melhorando...
 
 ## Instalação (modo dev)
 ```bash
