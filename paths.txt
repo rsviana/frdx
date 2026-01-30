@@ -1,0 +1,9 @@
+﻿/
+robots.txt
+sitemap.xml
+css/
+uploads/
+admin/
+laboratorio/
+robots
+tool/
