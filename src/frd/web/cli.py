@@ -1,14 +1,10 @@
 from __future__ import annotations
-
 import json
 from pathlib import Path
-
 import typer
-
 from frd.web.check import iter_check, results_to_jsonable
 
 app = typer.Typer(help="Ferramentas HTTP/Web (auditoria e validação).")
-
 
 @app.command("check")
 def check(
@@ -57,7 +53,6 @@ def check(
         follow_redirects=follow_redirects,
         include_status=include_set,
     ):
-        # streaming (texto)
         if not json_out:
             if r.error:
                 typer.echo(f"[ERR] {r.method} {r.url} ({r.elapsed_ms}ms) error={r.error}")
@@ -67,15 +62,16 @@ def check(
 
         results.append(r)
 
-    # JSON no final
+
     if json_out:
         typer.echo(json.dumps(results_to_jsonable(results), ensure_ascii=False, indent=2))
         raise typer.Exit(code=0)
 
-    # Summary no final (uma vez só)
+    RED_BOLD = "\033[1;31m"
+    RESET = "\033[0m"
     ok_200 = [x for x in results if x.status_code == 200]
     if ok_200:
         typer.echo("\n────────── Summary (200 OK) ──────────")
         for x in ok_200:
-            typer.echo(f"  {x.path}")
-        typer.echo(f"\nTotal 200 OK: {len(ok_200)}")
+            typer.echo(f"{RED_BOLD}  {x.path}{RESET}")
+            typer.echo(f"\n{RED_BOLD}Total 200 OK: {len(ok_200)}{RESET}")
