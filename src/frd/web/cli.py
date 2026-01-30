@@ -8,7 +8,6 @@ from frd.web.check import run_check, results_to_jsonable
 
 app = typer.Typer(help="Ferramentas HTTP/Web (auditoria e validação).")
 
-
 @app.command("check")
 def check(
     base_url: str = typer.Argument(..., help="Base URL (ex: https://example.com)"),

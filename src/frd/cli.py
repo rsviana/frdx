@@ -12,7 +12,12 @@ from frd.dns.resolve import resolve, reverse_lookup
 from frd.scan.tcp import tcp_connect_scan
 from frd.diag.tcp_ping import tcp_ping
 
+#from frd.cli.web import app as web_app
+from frd.web.cli import app as web_app
+
+
 app = typer.Typer(help="FRD - Ferramenta de Redes e Segurança (CLI)")
+app.add_typer(web_app, name="web")
 net_app = typer.Typer(help="Cálculos e planejamento de rede")
 dns_app = typer.Typer(help="DNS tools")
 scan_app = typer.Typer(help="Varredura (responsável)")
