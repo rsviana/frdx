@@ -2,9 +2,9 @@
 
 FRD é uma ferramenta em Python focada em **redes, endereçamento IP e segurança**, com interface de linha de comando (CLI), arquitetura modular e testes automatizados.
 
-O projeto foi desenhado para ser **previsível, auditável e extensível**, servindo tanto para uso prático quanto para estudo.
+Este README foi escrito para que **qualquer pessoa** consiga instalar e executar o projeto — inclusive quem nunca criou `venv` ou usou `pip` antes.
 
-> 🚧 Projeto voltado para estudo de Sec | Podem haver melhorias | Pode haver paralização | Pode não ser terminado 
+> 🚧 Projeto voltado para estudo de Segurança. Pode evoluir, parar ou mudar de escopo.
 
 ---
 
@@ -14,9 +14,8 @@ O projeto foi desenhado para ser **previsível, auditável e extensível**, serv
 - Estrutura organizada em `src/`
 - Módulos independentes e testáveis
 - Suporte a **IPv4**, **IPv6**, **DNS**, **Scan TCP** e **Web auditing**
-- Testes unitários e de integração com **pytest**
+- Testes automatizados com **pytest** (unitários e integração)
 - Compatível com **Windows, macOS e Linux**
-- Núcleo funcional testável sem dependência de rede externa
 
 ---
 
@@ -33,48 +32,134 @@ frd/
 │       ├── scan/
 │       └── web/
 ├── tests/
-│   ├── ipv4/
-│   ├── ipv6/
-│   ├── dns/
-│   ├── scan/
-│   └── web/
 ├── pyproject.toml
+├── run.sh
 └── README.md
+```
+
+---
+
+## 📚 Conceitos rápidos (para iniciantes)
+
+- **Python**: linguagem usada no FRD.
+- **pip**: ferramenta que instala bibliotecas/projetos Python.
+- **venv**: “ambiente virtual” que isola as dependências do FRD para não misturar com outros projetos.
+
+---
+
+## ✅ Pré-requisitos
+
+- Python **3.10+**
+- Git (opcional, mas recomendado)
+
+Verifique se o Python está instalado:
+
+- Windows:
+```powershell
+python --version
+```
+
+- macOS/Linux:
+```bash
+python3 --version
+```
+
+---
+
+## ⬇️ Baixar o projeto
+
+Com Git:
+
+```bash
+git clone https://github.com/SEU_USUARIO/frd.git
+cd frd
+```
+
+Ou baixe o ZIP pelo GitHub e extraia, então entre na pasta do projeto.
+
+---
+
+## 🧰 Instalação (venv + pip + FRD)
+
+### Windows (PowerShell)
+
+1) Criar e ativar o venv:
+```powershell
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+```
+
+> Se der erro de política do PowerShell, execute **como administrador**:
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+```
+
+2) Atualizar pip e instalar o FRD:
+```powershell
+python -m pip install -U pip
+pip install -e .
+```
+
+3) Testar:
+```powershell
+frd --help
+```
+
+Se o comando `frd` não aparecer, use:
+```powershell
+python -m frd.cli --help
+```
+
+---
+
+### macOS / Linux
+
+1) Criar e ativar o venv:
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+2) Atualizar pip e instalar o FRD:
+```bash
+python -m pip install -U pip
+pip install -e .
+```
+
+3) Rodar:
+```bash
+frd --help
+```
+
+Se o entrypoint `frd` não estiver disponível, use o script auxiliar:
+
+```bash
+chmod +x run.sh
+./run.sh --help
 ```
 
 ---
 
 ## 🚀 Uso
 
-### Executando no Windows
-
+### Ajuda geral
 ```bash
 frd --help
 ```
 
-Ou diretamente:
-
+### Ajuda por módulo
 ```bash
-python -m frd.cli
-```
-
-### Executando no macOS / Linux
-
-```bash
-./run.sh
+frd net --help
+frd dns --help
+frd scan --help
+frd web --help
 ```
 
 ---
 
-## 🧭 Visão geral dos módulos
+## 🧭 Módulos e exemplos
 
 ### 📡 Net (IPv4 / IPv6)
-
-```bash
-frd net --help
-```
-
-Exemplos:
 
 ```bash
 frd net ipv4-info 192.168.0.1/24
@@ -83,150 +168,63 @@ frd net ipv6-expand 2001:db8::1
 frd net ipv6-reverse 2001:db8::1
 ```
 
----
-
 ### 🌐 DNS
 
 ```bash
-frd dns --help
 frd dns resolve google.com
 ```
 
-> Testes DNS com rede são marcados como `integration`.
-
----
+> Em algumas redes corporativas, DNS por UDP/53 pode ser bloqueado.
 
 ### 🔍 Scan (TCP)
 
 ```bash
-frd scan --help
-```
-
-Exemplo:
-
-```bash
 frd scan tcp 8.8.8.8 --ports 53
-```
-
-Múltiplas portas:
-
-```bash
 frd scan tcp 8.8.8.8 --ports 22,53,443
 ```
 
----
-
 ### 🌍 Web (auditoria HTTP)
 
-Módulo dedicado para **checagem explícita de paths HTTP**, com saída em tempo real.
-
-```bash
-frd web --help
-```
-
-#### Exemplo básico
-
-```bash
-frd web check https://example.com --paths /
-```
-
-#### Usando arquivo de paths
+Checagem explícita de paths (sem crawling e sem brute force).
 
 ```bash
 frd web check https://example.com --paths-file paths.txt
 ```
 
 Exemplo de `paths.txt`:
-
 ```text
 /
 robots.txt
+sitemap.xml
 admin/
 uploads/
-api/
+css/
 ```
 
-#### Filtrar por status HTTP
-
+Mais exemplos:
 ```bash
 frd web check https://example.com --paths-file paths.txt --include 200,301,302,401,403
-```
-
-#### Método HEAD (mais rápido)
-
-```bash
 frd web check https://example.com --paths-file paths.txt --method HEAD
-```
-
-#### Saída em JSON (relatório)
-
-```bash
 frd web check https://example.com --paths-file paths.txt --json
 ```
-
-> O módulo **não faz crawling nem brute force**.  
-> Apenas testa os paths explicitamente informados.
-
----
-
-## 🌐 Comandos IPv6 disponíveis
-
-- `ipv6-info` — informações detalhadas sobre um endereço IPv6
-- `ipv6-expand` — expande IPv6 compactado
-- `ipv6-reverse` — gera o reverse DNS (ip6.arpa)
-- `ipv6-subnets` — gera sub-redes a partir de um prefixo IPv6 (**em evolução**)
-
-Todos os comandos IPv6 funcionam **offline**, usando apenas a biblioteca padrão.
 
 ---
 
 ## 🧪 Testes
 
-O projeto utiliza **pytest**.
-
-### Executar testes unitários
-
 ```bash
 python -m pytest -q
-```
-
-### Executar todos os testes (incluindo integração)
-
-```bash
 python -m pytest
-```
-
-### Ver markers disponíveis
-
-```bash
 python -m pytest --markers
 ```
 
 ---
 
-## 🧠 Filosofia do projeto
+## 🧹 Qualidade (Lint)
 
-- Código claro > código mágico
-- CLI previsível e explícita
-- Funções pequenas e testáveis
-- IPv6 tratado como cidadão de primeira classe
-- Ferramenta pensada para profissionais
-- Crescimento incremental, validado por testes
-
----
-
-## 📌 Roadmap (curto prazo)
-
-- Evolução do módulo `ipv6-subnets`
-- Novos utilitários IPv6:
-  - `ipv6-range`
-  - `ipv6-contains`
-  - `ipv6-summarize`
-- Melhorias no módulo `web`:
-  - headers customizados
-  - modo verbose / quiet
-  - baseline e diff de auditoria
-- Padronização de saída (`--json`)
+```bash
+ruff check .
+```
 
 ---
 
