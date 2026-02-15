@@ -1,8 +1,9 @@
 # FRD — Ferramenta de Redes e Segurança
 
-FRD é uma ferramenta em Python focada em **redes, endereçamento IP e segurança**, com interface de linha de comando (CLI), arquitetura modular e testes automatizados.
+FRD é uma ferramenta em Python focada em **redes, endereçamento IP e segurança**, com interface de linha de comando (CLI), arquitetura modular e testes automatizados. É uma ferramenta de estudo, a idéia era fazer um sistema completo com github, readme detalhado, etc., para fins educacionais. Como segurança e rede é uma área que gosto e estudo muito, resolvi focar nela. O sistema esta em constante evolução e pode apresentar erros, o que é natual, pois como já dito é fonte de estudos. Espero que gostem e façam bom uso.
 
-Este README foi escrito para que **qualquer pessoa** consiga instalar e executar o projeto — inclusive quem nunca criou `venv` ou usou `pip` antes.
+
+O README foi escrito para que **qualquer pessoa** consiga instalar e executar o projeto — inclusive quem nunca criou `venv` ou usou `pip` antes.
 
 > 🚧 Projeto voltado para estudo de Segurança. Pode evoluir, parar ou mudar de escopo.
 
@@ -185,13 +186,14 @@ frd scan tcp 8.8.8.8 --ports 22,53,443
 
 ### 🌍 Web (auditoria HTTP)
 
-Checagem explícita de paths (sem crawling e sem brute force).
+Checagem explícita de paths 
+> ⚠️ Não é crawling e nem brute force.
 
 ```bash
 frd web check https://example.com --paths-file paths.txt
 ```
 
-Exemplo de `paths.txt`:
+Exemplo de `wordlist.txt`:
 ```text
 /
 robots.txt
